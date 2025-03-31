@@ -3,19 +3,19 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/golang-jwt/jwt/v5"
+	"license/config"
 	"net/http"
 	"time"
-)
 
-var secretKey = []byte("secret-key")
+	"github.com/golang-jwt/jwt/v5"
+)
 
 func CreateJWTToken(username string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	})
-	tokenString, err := token.SignedString(secretKey)
+	tokenString, err := token.SignedString(config.Vars.JWTSecret)
 	if err != nil {
 		return "", err
 	}
@@ -24,7 +24,7 @@ func CreateJWTToken(username string) (string, error) {
 
 func VerifyJWTToken(tokenString string) error {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return secretKey, nil
+		return config.Vars.JWTSecret, nil
 	})
 
 	if err != nil {
@@ -75,14 +75,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		tokenString, err := CreateJWTToken(u.Username)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Errorf("User Not Accepted")
+			fmt.Fprintf(w, "User Not Accepted")
 		}
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, tokenString)
 		return
 	} else {
 		w.WriteHeader(http.StatusUnauthorized)
-		fmt.Printf("Invalid Credentials")
+		fmt.Fprintf(w, "Invalid Credentials")
 	}
 }
 
@@ -105,6 +105,4 @@ func CheckTokenHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-
-	return
 }

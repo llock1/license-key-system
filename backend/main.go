@@ -1,17 +1,27 @@
 package main
 
 import (
-	"github.com/rs/cors"
 	"license/auth"
 	"license/config"
+	"license/database"
 	"license/handlers"
 	"license/middleware"
+	"log"
 	"net/http"
+
+	"github.com/rs/cors"
 )
 
 func main() {
+
+	devMode := true
+
+	if !config.InitConfig(devMode) {
+		log.Fatal("failed to initialize config")
+	}
+
 	// Connect to db
-	config.Connect()
+	database.Connect()
 
 	corsHandler := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:5173"}, // Adjust to your frontend URL

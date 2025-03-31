@@ -3,11 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/google/uuid"
-	"gorm.io/gorm"
-	"license/config"
+	"license/database"
 	"license/models"
 	"net/http"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 func AddKey(w http.ResponseWriter, req *http.Request) {
@@ -26,7 +27,7 @@ func AddKey(w http.ResponseWriter, req *http.Request) {
 
 	new_uuid := uuid.New().String()
 	key := models.LicenseKey{Key: new_uuid}
-	config.Db.Create(&key)
+	database.Client.Create(&key)
 	response := Response{
 		Message: "Successfullt Created Key",
 		Success: true,
@@ -51,7 +52,7 @@ func DeleteKey(w http.ResponseWriter, req *http.Request) {
 	}
 
 	var key models.LicenseKey
-	err := config.Db.Where("key = ?", keyUUID).First(&key).Error
+	err := database.Client.Where("key = ?", keyUUID).First(&key).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			http.Error(w, "Key does not exist", http.StatusNotFound)
@@ -61,7 +62,7 @@ func DeleteKey(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = config.Db.Delete(&key).Error
+	err = database.Client.Delete(&key).Error
 	if err != nil {
 		http.Error(w, "Failed to delete key", http.StatusInternalServerError)
 		return
@@ -84,7 +85,7 @@ func AuthenticateKey(w http.ResponseWriter, req *http.Request) {
 
 	uuid := req.URL.Query().Get("uuid")
 	var key models.LicenseKey
-	err := config.Db.Where("key = ?", uuid).First(&key).Error
+	err := database.Client.Where("key = ?", uuid).First(&key).Error
 
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
