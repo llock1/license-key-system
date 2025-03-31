@@ -85,3 +85,26 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Invalid Credentials")
 	}
 }
+
+func CheckTokenHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	type Token struct {
+		Token string `json:"token"`
+	}
+
+	var t Token
+
+	json.NewDecoder(r.Body).Decode(&t)
+
+	err := VerifyJWTToken(t.Token)
+
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Printf("Invalid Token")
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	return
+}

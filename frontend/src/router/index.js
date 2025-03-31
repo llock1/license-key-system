@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // PAGES
 import Login from '@/pages/Login.vue'
+import Logout from '@/pages/Logout.vue'
 import KeyListing from '@/pages/KeyListing.vue'
 
 // LAYOUTS
@@ -21,6 +22,7 @@ const routes = [
         component: BlankLout,
         children: [
             { path: 'login', component: Login },
+            { path: 'logout', component: Logout },
         ]
     },
 ]
