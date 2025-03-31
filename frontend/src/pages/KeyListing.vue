@@ -1,10 +1,9 @@
 <script setup>
+
 </script>
 
 <template>
-  <div>
-    <router-view />
-  </div>
+<h1>KEYS</h1>
 </template>
 
 <style scoped>

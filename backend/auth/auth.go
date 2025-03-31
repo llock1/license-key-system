@@ -71,7 +71,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf(u.Username)
 	fmt.Printf(u.Password)
 
-	if u.Username == "alex" && u.Password == "dickens" {
+	if u.Username == "lock" && u.Password == "lock" {
 		tokenString, err := CreateJWTToken(u.Username)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
