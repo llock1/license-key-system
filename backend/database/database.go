@@ -10,11 +10,12 @@ import (
 var Client *gorm.DB
 
 func Connect() {
-	Db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
+	var err error
+	Client, err = gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
 
 	if err != nil {
 		panic(err)
 	}
 
-	Db.AutoMigrate(&models.LicenseKey{})
+	Client.AutoMigrate(&models.LicenseKey{})
 }

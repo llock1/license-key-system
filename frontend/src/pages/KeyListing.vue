@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { ref, onMounted } from "vue";
+import { CheckUserIsAuthenticated } from "@/functions/index.js";
 
 const router = useRouter()
 const store = useStore()
@@ -28,6 +29,7 @@ const getKeys = async () => {
 
 onMounted(() => {
   getKeys();
+  CheckUserIsAuthenticated(store, router);
 });
 </script>
 

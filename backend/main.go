@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"license/config"
 	"license/database"
+	"license/middleware"
 	"license/routes"
 
 	"github.com/alexflint/go-arg"
@@ -34,16 +35,22 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
+	// UNRESTRICTED VIEWS
 	app.Post("/api/auth", routes.AuthUser)
+	app.Post("/api/check-token", routes.CheckTokenHandler)
 
-	JWT_SECRET := []byte(config.Vars.JWTSecret)
+	jwtSecret := []byte(config.Vars.JWTSecret)
 	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: JWT_SECRET},
+		SigningKey: jwtware.SigningKey{Key: jwtSecret},
 	}))
+	app.Use(middleware.AuthMiddleware())
 
+	// RESTRICTED VIEWS
+	app.Get("/api/keys", routes.AllKeys)
 	app.Get("/api/restricted", routes.RestrictedExample)
 
 	fmt.Printf("Listening on port %s\n", config.Vars.Port)
+	fmt.Printf("Accepting requests from %s\n", config.Vars.FrontendURL)
 
 	app.Listen(fmt.Sprintf(":%s", config.Vars.Port))
 }

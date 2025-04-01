@@ -49,9 +49,9 @@ const handleLogin = async () => {
   }
 }
 
-onMounted(
-    checkTokenValidity
-)
+onMounted(() => {
+  checkTokenValidity();
+});
 </script>
 
 <template>
