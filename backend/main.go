@@ -9,7 +9,7 @@ import (
 	"github.com/alexflint/go-arg"
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
-	//"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -28,10 +28,11 @@ func main() {
 		Immutable: true,
 	})
 
-	//app.Use(cors.New(cors.Config{
-	//	AllowOrigins: []string{config.Vars.FrontendURL},
-	//	AllowHeaders: []string{"Origin", "Accept", "Content-Type", "Authorization"},
-	//}))
+	ALLOWED_ORIGINS := fmt.Sprintf("%s", config.Vars.FrontendURL)
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: ALLOWED_ORIGINS,
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+	}))
 
 	app.Post("/api/auth", routes.AuthUser)
 	app.Get("/api/restricted", routes.RestrictedExample)
