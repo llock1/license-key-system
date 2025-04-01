@@ -2,15 +2,13 @@ package main
 
 import (
 	"fmt"
-	"license/auth"
 	"license/config"
 	"license/database"
-	"license/handlers"
-	"license/middleware"
-	"net/http"
+	"license/routes"
 
 	"github.com/alexflint/go-arg"
-	"github.com/rs/cors"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/cors"
 )
 
 func main() {
@@ -25,19 +23,23 @@ func main() {
 
 	database.Connect()
 
-	corsHandler := cors.New(cors.Options{
-		AllowedOrigins: []string{config.Vars.FrontendURL},
-		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders: []string{"Content-Type", "Authorization"},
+	app := fiber.New(fiber.Config{
+		Immutable: true,
 	})
 
-	http.HandleFunc("/login", auth.LoginHandler)
-	http.HandleFunc("/check-token", auth.CheckTokenHandler)
-	http.HandleFunc("/create", middleware.AuthenticateMiddleware(handlers.AddKey))
-	http.HandleFunc("/delete", middleware.AuthenticateMiddleware(handlers.DeleteKey))
-	http.HandleFunc("/authenticate", middleware.AuthenticateMiddleware(handlers.AuthenticateKey))
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: []string{config.Vars.FrontendURL},
+		AllowHeaders: []string{"Origin", "Accept", "Content-Type", "Authorization"},
+	}))
+
+	app.Get("/", func(c fiber.Ctx) error {
+		return c.SendString("Hello world")
+	})
+
+	app.Post("/api/auth", routes.AuthUser)
+	app.Post("/api/logout", routes.LogoutUser)
 
 	fmt.Printf("Listening on port %s\n", config.Vars.Port)
 
-	http.ListenAndServe(fmt.Sprintf(":%s", config.Vars.Port), corsHandler.Handler(http.DefaultServeMux))
+	app.Listen(fmt.Sprintf(":%s", config.Vars.Port))
 }
