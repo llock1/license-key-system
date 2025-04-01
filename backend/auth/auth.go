@@ -16,8 +16,7 @@ func CreateJWTToken(username string) (string, error) {
 		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	})
 
-	var secret = []byte("my-secret")
-	//var secret = []byte(config.Vars.JWTSecret) This doesnt work
+	var secret = []byte(config.Vars.JWTSecret)
 	tokenString, err := token.SignedString(secret)
 	if err != nil {
 		return "", err
@@ -69,10 +68,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var u User
 
 	json.NewDecoder(r.Body).Decode(&u)
-
-	fmt.Printf("DETAILS")
-	fmt.Printf(u.Username)
-	fmt.Printf(u.Password)
 
 	if u.Username == "lock" && u.Password == "lock" {
 		tokenString, err := CreateJWTToken(u.Username)
