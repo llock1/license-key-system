@@ -32,15 +32,14 @@ const checkTokenValidity = async () => {
 
 const handleLogin = async () => {
   try {
-    const response = await axios.post("http://localhost:8090/login", {
+    const response = await axios.post("http://localhost:8090/api/auth", {
       username: username.value,
       password: password.value,
     })
 
     if (response.status === 200) {
-      console.log(response.data)
       store.dispatch('removeToken')
-      store.dispatch('storeToken', response.data)
+      store.dispatch('storeToken', response.data['token'])
       router.push("/")
     } else {
       console.log("BAAD")
@@ -56,24 +55,6 @@ onMounted(
 </script>
 
 <template>
-<!--  <section id="login">-->
-<!--    <div class="flex justify-center items-center h-[100dvh]">-->
-<!--      <div class="card border border-2 border-grey-700 bg-grey-800 p-8">-->
-<!--        <form @submit.prevent="handleLogin" class="flex flex-col gap-4 w-[300px]">-->
-<!--          <div class="flex flex-col gap-2">-->
-<!--            <label for="username">Username:</label>-->
-<!--            <input type="text" v-model="username" name="username" id="username" class="border border-2 border-black">-->
-<!--          </div>-->
-<!--          <div class="flex flex-col gap-2">-->
-<!--            <label for="password">Password:</label>-->
-<!--            <input type="password" v-model="password" name="password" id="password" class="border border-2 border-black">-->
-<!--          </div>-->
-<!--          <input type="submit" value="SUBMIT">-->
-<!--        </form>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </section>-->
-
   <section class="bg-gray-50 dark:bg-gray-900">
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
