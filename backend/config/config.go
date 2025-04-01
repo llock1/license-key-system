@@ -7,16 +7,20 @@ import (
 )
 
 type Config struct {
-	JWTSecret string
+	JWTSecret   string
+	FrontendURL string
+	Port        string
 }
 
 func (config *Config) IsValid() bool {
-	return len(config.JWTSecret) != 0
+	return len(config.JWTSecret) != 0 &&
+		len(config.FrontendURL) != 0 &&
+		len(config.Port) != 0
 }
 
 var Vars *Config
 
-func InitConfig(devMode bool) bool {
+func Initialize(devMode bool) {
 
 	if devMode {
 		godotenv.Load(".env.development")
@@ -27,12 +31,12 @@ func InitConfig(devMode bool) bool {
 
 	godotenv.Load(".env")
 
-	Vars := new(Config)
+	Vars = new(Config)
 	Vars.JWTSecret = os.Getenv("JWT_SECRET")
+	Vars.FrontendURL = os.Getenv("FRONTEND_URL")
+	Vars.Port = os.Getenv("PORT")
 
 	if !Vars.IsValid() {
-		return false
+		panic("failed to initialize config")
 	}
-
-	return true
 }

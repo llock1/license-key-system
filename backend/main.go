@@ -1,12 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"license/auth"
 	"license/config"
 	"license/database"
 	"license/handlers"
 	"license/middleware"
-	"log"
 	"net/http"
 
 	"github.com/alexflint/go-arg"
@@ -21,15 +21,12 @@ func main() {
 
 	arg.MustParse(&args)
 
-	if !config.InitConfig(args.Development) {
-		log.Fatal("failed to initialize config")
-	}
+	config.Initialize(args.Development)
 
-	// Connect to db
 	database.Connect()
 
 	corsHandler := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:5173"}, // Adjust to your frontend URL
+		AllowedOrigins: []string{config.Vars.FrontendURL},
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
 		AllowedHeaders: []string{"Content-Type", "Authorization"},
 	})
@@ -40,7 +37,7 @@ func main() {
 	http.HandleFunc("/delete", middleware.AuthenticateMiddleware(handlers.DeleteKey))
 	http.HandleFunc("/authenticate", middleware.AuthenticateMiddleware(handlers.AuthenticateKey))
 
-	// Listen
-	http.ListenAndServe(":8090", corsHandler.Handler(http.DefaultServeMux))
+	fmt.Printf("Listening on port %s\n", config.Vars.Port)
 
+	http.ListenAndServe(fmt.Sprintf(":%s", config.Vars.Port), corsHandler.Handler(http.DefaultServeMux))
 }
