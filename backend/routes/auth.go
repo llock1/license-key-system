@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"license/config"
 	"time"
 )
 
@@ -12,7 +13,7 @@ type UserDTO struct {
 }
 
 func AuthUser(c *fiber.Ctx) error {
-
+	// https://docs.gofiber.io/contrib/jwt/
 	user := c.FormValue("user")
 	pass := c.FormValue("pass")
 
@@ -31,8 +32,8 @@ func AuthUser(c *fiber.Ctx) error {
 	// Create token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	// Generate encoded token and send it as response.
-	t, err := token.SignedString([]byte("secret"))
+	JWT_SECRET := []byte(config.Vars.JWTSecret)
+	t, err := token.SignedString(JWT_SECRET)
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}

@@ -35,11 +35,13 @@ func main() {
 	}))
 
 	app.Post("/api/auth", routes.AuthUser)
-	app.Get("/api/restricted", routes.RestrictedExample)
 
+	JWT_SECRET := []byte(config.Vars.JWTSecret)
 	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
+		SigningKey: jwtware.SigningKey{Key: JWT_SECRET},
 	}))
+
+	app.Get("/api/restricted", routes.RestrictedExample)
 
 	fmt.Printf("Listening on port %s\n", config.Vars.Port)
 
