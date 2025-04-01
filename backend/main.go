@@ -9,14 +9,19 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/alexflint/go-arg"
 	"github.com/rs/cors"
 )
 
 func main() {
 
-	devMode := true
+	var args struct {
+		Development bool
+	}
 
-	if !config.InitConfig(devMode) {
+	arg.MustParse(&args)
+
+	if !config.InitConfig(args.Development) {
 		log.Fatal("failed to initialize config")
 	}
 

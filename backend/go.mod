@@ -12,6 +12,8 @@ require (
 )
 
 require (
+	github.com/alexflint/go-arg v1.5.1 // indirect
+	github.com/alexflint/go-scalar v1.2.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/glebarez/go-sqlite v1.21.2 // indirect
 	github.com/glebarez/sqlite v1.11.0 // indirect
