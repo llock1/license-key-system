@@ -15,7 +15,10 @@ func CreateJWTToken(username string) (string, error) {
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	})
-	tokenString, err := token.SignedString(config.Vars.JWTSecret)
+
+	var secret = []byte("my-secret")
+	//var secret = []byte(config.Vars.JWTSecret) This doesnt work
+	tokenString, err := token.SignedString(secret)
 	if err != nil {
 		return "", err
 	}
