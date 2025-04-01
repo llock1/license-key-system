@@ -7,8 +7,9 @@ import (
 	"license/routes"
 
 	"github.com/alexflint/go-arg"
-	"github.com/gofiber/fiber/v3"
-	"github.com/gofiber/fiber/v3/middleware/cors"
+	jwtware "github.com/gofiber/contrib/jwt"
+	"github.com/gofiber/fiber/v2"
+	//"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -27,17 +28,17 @@ func main() {
 		Immutable: true,
 	})
 
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: []string{config.Vars.FrontendURL},
-		AllowHeaders: []string{"Origin", "Accept", "Content-Type", "Authorization"},
-	}))
-
-	app.Get("/", func(c fiber.Ctx) error {
-		return c.SendString("Hello world")
-	})
+	//app.Use(cors.New(cors.Config{
+	//	AllowOrigins: []string{config.Vars.FrontendURL},
+	//	AllowHeaders: []string{"Origin", "Accept", "Content-Type", "Authorization"},
+	//}))
 
 	app.Post("/api/auth", routes.AuthUser)
-	app.Post("/api/logout", routes.LogoutUser)
+	app.Get("/api/restricted", routes.RestrictedExample)
+
+	app.Use(jwtware.New(jwtware.Config{
+		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
+	}))
 
 	fmt.Printf("Listening on port %s\n", config.Vars.Port)
 
