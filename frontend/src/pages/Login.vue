@@ -15,7 +15,7 @@ const token = store.getters.getToken
 const checkTokenValidity = async () => {
   if (token) {
     try {
-      const response = await axios.post("http://localhost:8090/check-token", { token })
+      const response = await axios.post("http://localhost:8090/api/check-token", { token })
 
       if (response.status === 200) {
         console.log(response.data)
