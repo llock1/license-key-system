@@ -10,6 +10,8 @@ type Config struct {
 	JWTSecret   string
 	FrontendURL string
 	Port        string
+
+	PostgresURL string
 }
 
 func (config *Config) IsValid() bool {
@@ -23,6 +25,7 @@ var Vars *Config
 func Initialize(devMode bool) {
 
 	if devMode {
+		godotenv.Load(".env.local")
 		godotenv.Load(".env.development")
 	} else {
 		godotenv.Load(".env.local")
@@ -35,6 +38,7 @@ func Initialize(devMode bool) {
 	Vars.JWTSecret = os.Getenv("JWT_SECRET")
 	Vars.FrontendURL = os.Getenv("FRONTEND_URL")
 	Vars.Port = os.Getenv("PORT")
+	Vars.PostgresURL = os.Getenv("POSTGRES_URL")
 
 	if !Vars.IsValid() {
 		panic("failed to initialize config")

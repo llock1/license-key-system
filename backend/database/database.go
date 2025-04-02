@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"license/config"
 	"license/models"
 
 	"gorm.io/driver/postgres"
@@ -13,8 +14,7 @@ var Client *gorm.DB
 func Connect() {
 	var err error
 
-	dsn := "postgresql://root:postgres@127.0.0.1:5432/lks"
-	Client, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	Client, err = gorm.Open(postgres.Open(config.Vars.PostgresURL), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
