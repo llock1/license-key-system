@@ -11,6 +11,6 @@ type License struct {
 	Creator User
 	Product Product
 
-	Key  string `gorm:"type:uuid"`
+	Key  string
 	Hwid string
 }
