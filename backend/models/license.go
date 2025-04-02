@@ -8,8 +8,10 @@ import (
 type License struct {
 	gorm.Model
 
-	Creator User
-	Product Product
+	CreatorID int
+	Creator   User
+	ProductID int
+	Product   Product
 
 	Key  string
 	Hwid string

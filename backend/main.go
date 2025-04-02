@@ -35,6 +35,7 @@ func main() {
 
 	// UNRESTRICTED VIEWS
 	app.Post("/api/auth", routes.AuthUser)
+	app.Post("/api/register", routes.RegisterUser)
 	app.Post("/api/check-token", routes.CheckTokenHandler)
 
 	app.Use(middleware.AuthMiddleware())
@@ -43,9 +44,6 @@ func main() {
 	app.Get("/api/keys", routes.AllKeys)
 	app.Get("/api/keys/:id/delete", routes.DeleteKey)
 	app.Get("/api/restricted", routes.RestrictedExample)
-
-	fmt.Printf("Listening on port %s\n", config.Vars.Port)
-	fmt.Printf("Accepting requests from %s\n", config.Vars.FrontendURL)
 
 	app.Listen(fmt.Sprintf(":%s", config.Vars.Port))
 }
