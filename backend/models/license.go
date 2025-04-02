@@ -10,9 +10,3 @@ type LicenseKey struct {
 	Key  string `gorm:"type:uuid"`
 	Hwid string
 }
-
-type User struct {
-	gorm.Model
-	Username string
-	Password string
-}
