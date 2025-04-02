@@ -8,9 +8,8 @@ import (
 	"license/routes"
 
 	"github.com/alexflint/go-arg"
-	jwtware "github.com/gofiber/contrib/jwt"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/cors"
 )
 
 func main() {
@@ -29,20 +28,14 @@ func main() {
 		Immutable: true,
 	})
 
-	ALLOWED_ORIGINS := fmt.Sprintf("%s", config.Vars.FrontendURL)
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: ALLOWED_ORIGINS,
-		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+		AllowOrigins: []string{config.Vars.FrontendURL},
+		AllowHeaders: []string{"Origin", "Content-Type", "Accept", "Authorization"},
 	}))
 
 	// UNRESTRICTED VIEWS
 	app.Post("/api/auth", routes.AuthUser)
 	app.Post("/api/check-token", routes.CheckTokenHandler)
-
-	jwtSecret := []byte(config.Vars.JWTSecret)
-	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: jwtSecret},
-	}))
 	app.Use(middleware.AuthMiddleware())
 
 	// RESTRICTED VIEWS

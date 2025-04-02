@@ -2,11 +2,12 @@ package core
 
 import (
 	"errors"
-	"github.com/gofiber/fiber/v2"
+
+	"github.com/gofiber/fiber/v3"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func IsUserAuthed(c *fiber.Ctx) error {
+func IsUserAuthed(c fiber.Ctx) error {
 	user, ok := c.Locals("user").(*jwt.Token)
 	if !ok {
 		return errors.New("missing or invalid token")

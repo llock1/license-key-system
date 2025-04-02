@@ -2,10 +2,11 @@ package routes
 
 import (
 	"fmt"
-	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
 	"license/config"
 	"time"
+
+	"github.com/gofiber/fiber/v3"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type UserDTO struct {
@@ -13,19 +14,19 @@ type UserDTO struct {
 	Email    *string `json:"email"`
 }
 
-func AuthUser(c *fiber.Ctx) error {
-	// https://docs.gofiber.io/contrib/jwt/
-	type User struct {
-		Username string `json:"username"`
+func AuthUser(c fiber.Ctx) error {
+
+	payload := struct {
+		User     string `json:"user"`
 		Password string `json:"password"`
+	}{}
+
+	if err := c.Bind().JSON(&payload); err != nil {
+		return err
 	}
 
-	var u User
-
-	err := c.BodyParser(&u)
-
 	// Throws Unauthorized error
-	if u.Username != "john" || u.Password != "doe" {
+	if payload.User != "john" || payload.Password != "doe" {
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}
 
@@ -48,7 +49,7 @@ func AuthUser(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"token": t})
 }
 
-func RestrictedExample(c *fiber.Ctx) error {
+func RestrictedExample(c fiber.Ctx) error {
 	return c.SendString("ok")
 }
 
@@ -69,17 +70,17 @@ func VerifyJWTToken(tokenString string) error {
 	return nil
 }
 
-func CheckTokenHandler(c *fiber.Ctx) error {
+func CheckTokenHandler(c fiber.Ctx) error {
 
-	type Token struct {
+	payload := struct {
 		Token string `json:"token"`
+	}{}
+
+	if err := c.Bind().JSON(&payload); err != nil {
+		return err
 	}
 
-	var t Token
-
-	c.BodyParser(&t)
-
-	err := VerifyJWTToken(t.Token)
+	err := VerifyJWTToken(payload.Token)
 
 	if err != nil {
 		return c.SendStatus(fiber.StatusUnauthorized)
