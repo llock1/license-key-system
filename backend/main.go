@@ -24,6 +24,8 @@ func main() {
 
 	database.Connect()
 
+	fmt.Println("THIS IS TO TEST PUSH TO GITHUB")
+
 	app := fiber.New(fiber.Config{
 		Immutable: true,
 	})
