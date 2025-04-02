@@ -2,11 +2,13 @@ package routes
 
 import (
 	"fmt"
-	"license/config"
-	"time"
-
 	"github.com/gofiber/fiber/v3"
 	"github.com/golang-jwt/jwt/v5"
+	"license/config"
+	"license/core"
+	"license/database"
+	"license/models"
+	"time"
 )
 
 type UserDTO struct {
@@ -16,25 +18,35 @@ type UserDTO struct {
 
 func AuthUser(c fiber.Ctx) error {
 
-	payload := struct {
-		User     string `json:"user"`
-		Password string `json:"password"`
-	}{}
+	var userRequest models.User
+	var user models.User
 
-	if err := c.Bind().JSON(&payload); err != nil {
+	//payload := struct {
+	//	User     string `json:"user"`
+	//	Password string `json:"password"`
+	//}{}
+
+	if err := c.Bind().JSON(&userRequest); err != nil {
 		return err
 	}
 
 	// Throws Unauthorized error
-	if payload.User != "john" || payload.Password != "doe" {
+	if err := database.Client.First(&user, "username = ?", "admin").Error; err != nil {
+		return c.SendStatus(fiber.StatusNotFound)
+	}
+
+	if user.Username == "" {
+		return c.SendStatus(fiber.StatusNotFound)
+	}
+
+	if !core.CheckPasswordHash(userRequest.Password, user.Password) {
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}
 
 	// Create the Claims
 	claims := jwt.MapClaims{
-		"name":  "John Doe",
-		"admin": true,
-		"exp":   time.Now().Add(time.Hour * 72).Unix(),
+		"name": userRequest.Username,
+		"exp":  time.Now().Add(time.Hour * 72).Unix(),
 	}
 
 	// Create token

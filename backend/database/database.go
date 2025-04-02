@@ -1,10 +1,9 @@
 package database
 
 import (
-	"license/models"
-
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
+	"license/models"
 )
 
 var Client *gorm.DB
@@ -18,4 +17,5 @@ func Connect() {
 	}
 
 	Client.AutoMigrate(&models.LicenseKey{})
+	Client.AutoMigrate(&models.User{})
 }
