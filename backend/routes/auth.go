@@ -3,9 +3,6 @@ package routes
 import (
 	"fmt"
 	"license/config"
-	"license/core"
-	"license/database"
-	"license/models"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
@@ -25,55 +22,6 @@ type UserDTO struct {
 	IsSupport    bool `json:"is_support"`
 	IsStaff      bool `json:"is_staff"`
 	IsBanned     bool `json:"is_banned"`
-}
-
-func AuthUser(c fiber.Ctx) error {
-
-	var userRequest models.User
-	var user models.User
-
-	//payload := struct {
-	//	User     string `json:"user"`
-	//	Password string `json:"password"`
-	//}{}
-
-	if err := c.Bind().JSON(&userRequest); err != nil {
-		return err
-	}
-
-	// Throws Unauthorized error
-	if err := database.Client.First(&user, "username = ?", "admin").Error; err != nil {
-		return c.SendStatus(fiber.StatusNotFound)
-	}
-
-	if user.Username == "" {
-		return c.SendStatus(fiber.StatusNotFound)
-	}
-
-	if !core.CheckPasswordHash(userRequest.Password, user.Password) {
-		return c.SendStatus(fiber.StatusUnauthorized)
-	}
-
-	// Create the Claims
-	claims := jwt.MapClaims{
-		"name": userRequest.Username,
-		"exp":  time.Now().Add(time.Hour * 72).Unix(),
-	}
-
-	// Create token
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	jwtSecret := []byte(config.Vars.JWTSecret)
-	t, err := token.SignedString(jwtSecret)
-	if err != nil {
-		return c.SendStatus(fiber.StatusInternalServerError)
-	}
-
-	return c.JSON(fiber.Map{"token": t})
-}
-
-func RestrictedExample(c fiber.Ctx) error {
-	return c.SendString("ok")
 }
 
 func VerifyJWTToken(tokenString string) error {

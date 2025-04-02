@@ -34,7 +34,7 @@ func main() {
 	}))
 
 	// UNRESTRICTED VIEWS
-	app.Post("/api/auth", routes.AuthUser)
+	app.Post("/api/login", routes.Login)
 	app.Post("/api/register", routes.RegisterUser)
 	app.Post("/api/check-token", routes.CheckTokenHandler)
 
@@ -43,7 +43,6 @@ func main() {
 	// RESTRICTED VIEWS
 	app.Get("/api/keys", routes.AllKeys)
 	app.Get("/api/keys/:id/delete", routes.DeleteKey)
-	app.Get("/api/restricted", routes.RestrictedExample)
 
 	app.Listen(fmt.Sprintf(":%s", config.Vars.Port))
 }

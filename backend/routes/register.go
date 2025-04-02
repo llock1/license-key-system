@@ -30,7 +30,7 @@ func RegisterUser(c fiber.Ctx) error {
 	}
 
 	if count > 0 {
-		return c.JSON(fiber.Map{
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
 			"success": false,
 			"message": "user already exists",
 			"user":    nil,
