@@ -17,7 +17,7 @@ type UserDTO struct {
 func AuthUser(c fiber.Ctx) error {
 
 	payload := struct {
-		User     string `json:"username"`
+		User     string `json:"user"`
 		Password string `json:"password"`
 	}{}
 

@@ -35,7 +35,7 @@ const checkTokenValidity = async () => {
 const handleLogin = async () => {
   try {
     const response = await axios.post("http://localhost:8090/api/auth", {
-      username: username.value,
+      user: username.value,
       password: password.value,
     })
 
