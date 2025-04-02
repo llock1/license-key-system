@@ -17,5 +17,5 @@ func Connect() {
 		panic(err)
 	}
 
-	Client.AutoMigrate(&models.LicenseKey{})
+	Client.AutoMigrate(&models.License{})
 }

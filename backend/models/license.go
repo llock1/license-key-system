@@ -5,14 +5,12 @@ import (
 	// "github.com/google/uuid"
 )
 
-type LicenseKey struct {
+type License struct {
 	gorm.Model
+
+	Creator User
+	Product Product
+
 	Key  string `gorm:"type:uuid"`
 	Hwid string
-}
-
-type User struct {
-	gorm.Model
-	Username string
-	Password string
 }

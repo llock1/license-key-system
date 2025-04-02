@@ -8,7 +8,7 @@ import (
 )
 
 func AllKeys(c fiber.Ctx) error {
-	var keys []models.LicenseKey
+	var keys []models.License
 
 	err := database.Client.Find(&keys).Error
 
@@ -21,7 +21,7 @@ func AllKeys(c fiber.Ctx) error {
 
 func DeleteKey(c fiber.Ctx) error {
 	id := c.Params("id")
-	var key models.LicenseKey
+	var key models.License
 	database.Client.First(&key, id)
 	database.Client.Delete(&key)
 	return c.SendStatus(fiber.StatusOK)
