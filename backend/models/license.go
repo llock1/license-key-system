@@ -2,13 +2,15 @@ package models
 
 import (
 	"gorm.io/gorm"
-	"time"
 	// "github.com/google/uuid"
 )
 
-type LicenseKey struct {
+type License struct {
 	gorm.Model
-	Key       string `gorm:"type:uuid"`
-	Hwid      string
-	ExpiresAt *time.Time
+
+	Creator User
+	Product Product
+
+	Key  string `gorm:"type:uuid"`
+	Hwid string
 }
