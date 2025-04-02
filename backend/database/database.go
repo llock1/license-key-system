@@ -18,4 +18,5 @@ func Connect() {
 
 	Client.AutoMigrate(&models.License{})
 	Client.AutoMigrate(&models.User{})
+	Client.AutoMigrate(&models.Product{})
 }
