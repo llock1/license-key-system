@@ -3,6 +3,7 @@ import {onMounted, ref} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from "vue-toastification";
+import {API_URL} from "@/config/index.js";
 import axios from 'axios'
 
 const store = useStore()
@@ -17,7 +18,7 @@ const token = store.getters.getToken
 const checkTokenValidity = async () => {
   if (token) {
     try {
-      const response = await axios.post("http://localhost:8090/api/check-token", { token })
+      const response = await axios.post((API_URL + "/api/check-token"), { token })
 
       if (response.status === 200) {
         console.log(response.data)
@@ -34,7 +35,7 @@ const checkTokenValidity = async () => {
 
 const handleLogin = async () => {
   try {
-    const response = await axios.post("http://localhost:8090/api/auth", {
+    const response = await axios.post((API_URL + "/api/auth"), {
       user: username.value,
       password: password.value,
     })

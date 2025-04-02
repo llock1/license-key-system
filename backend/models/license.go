@@ -13,6 +13,6 @@ type LicenseKey struct {
 
 type User struct {
 	gorm.Model
-	Username string `json:"user"`
-	Password string `json:"password"`
+	Username string
+	Password string
 }
