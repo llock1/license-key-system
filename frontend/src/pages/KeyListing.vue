@@ -5,17 +5,17 @@ import { useStore } from 'vuex'
 import { ref, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { CheckUserIsAuthenticated } from "@/functions/index.js";
+import { API_URL } from "@/config/index.js";
 
 const router = useRouter()
 const store = useStore()
 const toast = useToast()
-const API_URL = "127.0.0.1:8090/"
 const token = store.getters.getToken
 const keys = ref([]);
 
 const getKeys = async () => {
   try {
-    const response = await axios.get("http://localhost:8090/api/keys", {
+    const response = await axios.get((API_URL + "/api/keys"), {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -31,7 +31,7 @@ const getKeys = async () => {
 
 const deleteKey = async (keyId) => {
   try {
-    const response = await axios.get(`http://localhost:8090/api/keys/${keyId}/delete`, {
+    const response = await axios.get((API_URL + `/api/keys/${keyId}/delete`), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -67,8 +67,8 @@ const copyKey = (keyId) => {
 
 
 onMounted(() => {
-  getKeys();
   CheckUserIsAuthenticated(store, router);
+  getKeys();
 });
 </script>
 

@@ -1,11 +1,12 @@
 import axios from "axios";
+import {API_URL} from "@/config/index.js";
 
 export async function CheckUserIsAuthenticated(store, router) {
     const token = store.getters.getToken
 
     if (token) {
         try {
-            const response = await axios.post("http://localhost:8090/api/check-token", { token })
+            const response = await axios.post((API_URL + "/api/check-token"), { token })
 
             if (response.status === 200) {
                 console.log(response.data);
