@@ -2,10 +2,12 @@
 import {onMounted, ref} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useToast } from "vue-toastification";
 import axios from 'axios'
 
 const store = useStore()
 const router = useRouter()
+const toast = useToast()
 
 const username = ref('')
 const password = ref('')
@@ -41,11 +43,18 @@ const handleLogin = async () => {
       store.dispatch('removeToken')
       store.dispatch('storeToken', response.data['token'])
       router.push("/")
+      toast.success("Successfully logged in!", {
+        timeout: 2000
+      });
     } else {
-      console.log("BAAD")
+      toast.error("Sorry, there was an error", {
+        timeout: 2000
+      });
     }
   } catch (error) {
-    console.log(error)
+    toast.error("Your username or password is incorrect!", {
+      timeout: 2000
+    });
   }
 }
 

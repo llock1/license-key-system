@@ -47,6 +47,7 @@ func main() {
 
 	// RESTRICTED VIEWS
 	app.Get("/api/keys", routes.AllKeys)
+	app.Get("/api/keys/:id/delete", routes.DeleteKey)
 	app.Get("/api/restricted", routes.RestrictedExample)
 
 	fmt.Printf("Listening on port %s\n", config.Vars.Port)
