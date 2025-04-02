@@ -36,6 +36,7 @@ func main() {
 	// UNRESTRICTED VIEWS
 	app.Post("/api/auth", routes.AuthUser)
 	app.Post("/api/check-token", routes.CheckTokenHandler)
+
 	app.Use(middleware.AuthMiddleware())
 
 	// RESTRICTED VIEWS
