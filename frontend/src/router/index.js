@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/pages/Login.vue'
 import Logout from '@/pages/Logout.vue'
 import KeyListing from '@/pages/KeyListing.vue'
+import Register from '@/pages/Register.vue'
 
 // LAYOUTS
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
@@ -23,6 +24,7 @@ const routes = [
         children: [
             { path: 'login', component: Login },
             { path: 'logout', component: Logout },
+            { path: 'register', component: Register },
         ]
     },
 ]
