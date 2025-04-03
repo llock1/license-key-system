@@ -34,7 +34,7 @@ func main() {
 	}))
 
 	// UNRESTRICTED VIEWS
-	app.Post("/api/login", routes.Login)
+	app.Post("/api/login", routes.LoginUser)
 	app.Post("/api/register", routes.RegisterUser)
 	app.Post("/api/check-token", routes.CheckTokenHandler)
 
