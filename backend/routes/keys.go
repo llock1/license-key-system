@@ -1,10 +1,11 @@
 package routes
 
 import (
-	"github.com/gofiber/fiber/v3"
-	"github.com/google/uuid"
 	"license/database"
 	"license/models"
+
+	"github.com/gofiber/fiber/v3"
+	"github.com/google/uuid"
 )
 
 type KeyDTO struct {
@@ -48,7 +49,7 @@ func CreateKey(c fiber.Ctx) error {
 		"key": KeyDTO{
 			ID:   key.ID,
 			Key:  key.Key,
-			Hwid: key.Hwid,
+			Hwid: key.HWID,
 		},
 	})
 }

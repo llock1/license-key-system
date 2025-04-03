@@ -13,5 +13,5 @@ type License struct {
 	Product   Product
 
 	Key  string `gorm:"uniqueIndex"`
-	Hwid string
+	HWID string
 }
