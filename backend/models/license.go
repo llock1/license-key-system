@@ -2,7 +2,6 @@ package models
 
 import (
 	"gorm.io/gorm"
-	// "github.com/google/uuid"
 )
 
 type License struct {
@@ -13,6 +12,6 @@ type License struct {
 	ProductID int
 	Product   Product
 
-	Key  string
+	Key  string `gorm:"uniqueIndex"`
 	Hwid string
 }

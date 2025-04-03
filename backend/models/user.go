@@ -9,8 +9,8 @@ import (
 type User struct {
 	gorm.Model
 
-	Username string `gorm:"unique"`
-	Email    string `gorm:"unique"`
+	Username string `gorm:"uniqueIndex"`
+	Email    string `gorm:"uniqueIndex"`
 	Password string
 
 	EmailVerifiedAt *time.Time
