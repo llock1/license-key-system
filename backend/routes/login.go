@@ -1,19 +1,22 @@
 package routes
 
 import (
-	"fmt"
-	"github.com/gofiber/fiber/v3"
-	"github.com/golang-jwt/jwt/v5"
+	"errors"
 	"license/config"
 	"license/core"
 	"license/database"
 	"license/models"
+	"strings"
 	"time"
+
+	"github.com/gofiber/fiber/v3"
+	"github.com/golang-jwt/jwt/v5"
+	"gorm.io/gorm"
 )
 
-func Login(c fiber.Ctx) error {
+func LoginUser(c fiber.Ctx) error {
 	payload := struct {
-		Username string `json:"username"`
+		User     string `json:"user"`
 		Password string `json:"password"`
 	}{}
 
@@ -21,38 +24,29 @@ func Login(c fiber.Ctx) error {
 		return err
 	}
 
-	fmt.Println(payload.Username)
-	fmt.Println(payload.Password)
-
 	var user models.User
-	var count int64
-
-	if err := database.Client.Model(&models.User{}).Where("username = ?", payload.Username).Count(&count).Error; err != nil {
-		return err
-	}
-
-	if count <= 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"success": false,
-			"message": "username or password is wrong",
-			"user":    nil,
-		})
-	}
-
-	if err := database.Client.Where("username = ?", payload.Username).First(&user).Error; err != nil {
+	if err := database.Client.Where("username = ? OR email = ?", payload.User, strings.ToLower(payload.User)).
+		Find(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"success": false,
+				"message": "user doesn't exist",
+				"user":    nil,
+			})
+		}
 		return err
 	}
 
 	if !core.CheckPasswordHash(payload.Password, user.Password) {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"success": false,
-			"message": "username or password is wrong",
+			"message": "invalid credentials",
 			"user":    nil,
 		})
 	}
 
 	claims := jwt.MapClaims{
-		"name": payload.Username,
+		"name": user.Username,
 		"exp":  time.Now().Add(time.Hour * 72).Unix(),
 	}
 
@@ -60,17 +54,17 @@ func Login(c fiber.Ctx) error {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	jwtSecret := []byte(config.Vars.JWTSecret)
-	t, err := token.SignedString(jwtSecret)
+	tokenStr, err := token.SignedString(jwtSecret)
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
-		"message": "Successfully Authenticated",
-		"token":   t,
+		"message": nil,
+		"token":   tokenStr,
 		"user": UserDTO{
-			Username: payload.Username,
+			Username: user.Username,
 			Email:    &user.Email,
 
 			EmailVerifiedAt: user.EmailVerifiedAt,

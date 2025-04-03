@@ -22,7 +22,7 @@ const token = store.getters.getToken
 const handleLogin = async () => {
   try {
     const response = await axios.post((API_URL + "/api/login"), {
-      username: username.value,
+      user: username.value,
       password: password.value,
     })
 
