@@ -3,9 +3,9 @@ package routes
 import (
 	"errors"
 	"license/config"
-	"license/core"
 	"license/database"
 	"license/models"
+	"license/utils"
 	"strings"
 	"time"
 
@@ -37,7 +37,7 @@ func LoginUser(c fiber.Ctx) error {
 		return err
 	}
 
-	if !core.CheckPasswordHash(payload.Password, user.Password) {
+	if !utils.CheckPasswordHash(payload.Password, user.Password) {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"success": false,
 			"message": "invalid credentials",
