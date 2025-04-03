@@ -1,32 +1,47 @@
 <script setup>
-import {onMounted} from 'vue'
+import {ref, onMounted} from 'vue'
 import axios from "axios";
 import {API_URL} from "@/config/index.js";
 import {useStore} from "vuex";
+import {useRouter} from "vue-router";
+import {ValidatePassword, CheckTokenValidity} from "@/functions/index.js";
+import {useToast} from "vue-toastification";
 
+const toast = useToast()
 const store = useStore()
-
+const router = useRouter()
 const token = store.getters.getToken
 
-const checkTokenValidity = async () => {
-  if (token) {
-    try {
-      const response = await axios.post((API_URL + "/api/check-token"), { token })
+const username = ref('')
+const email = ref('')
+const password = ref('')
 
-      if (response.status === 200) {
-        console.log(response.data)
-        router.push("/")
-      } else {
-        store.commit('removeToken')
-      }
-    } catch (error) {
-      console.log(error)
+
+const handleRegister = async () => {
+  if (!ValidatePassword(password.value)) {
+    toast.error("Sorry, your password must have at least 8 characters & a special character", 4000)
+    return
+  }
+  try {
+    const response = await axios.post((API_URL + "/api/register"), {
+      "username": username.value,
+      "email": email.value,
+      "password": password.value,
+    });
+
+    if (response.status == 200) {
+      router.push("/login")
+      toast.success("Account created successfully")
+    } else {
+      toast.error("Sorry, an error has occured")
     }
+  } catch (error) {
+
   }
 }
 
 onMounted(() => {
-  checkTokenValidity()
+  CheckTokenValidity(store, router)
 });
 </script>
 
@@ -41,7 +56,7 @@ onMounted(() => {
           <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             Register an account
           </h1>
-          <form class="space-y-4 md:space-y-6" @submit.prevent="handleLogin">
+          <form class="space-y-4 md:space-y-6" @submit.prevent="handleRegister">
             <div>
               <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
               <input type="email" v-model="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="email" required="">

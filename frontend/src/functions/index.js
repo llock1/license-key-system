@@ -44,3 +44,14 @@ export async function CheckTokenValidity(store, router) {
         }
     }
 }
+
+export function ValidatePassword(password) {
+    const minLength = 8;
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length >= minLength && hasSpecialChar) {
+        return true;
+    } else {
+        return false;
+    }
+}
