@@ -1,10 +1,12 @@
 package routes
 
 import (
+	"fmt"
 	"license/database"
 	"license/models"
 	"strings"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -12,13 +14,24 @@ import (
 func RegisterUser(c fiber.Ctx) error {
 
 	payload := struct {
-		Username string `json:"username"`
-		Email    string `json:"email"`
-		Password string `json:"password"`
+		Username string `json:"username" validate:"required,min=3,max=24,alphanum"`
+		Email    string `json:"email" validate:"required,email,max=320"`
+		Password string `json:"password" validate:"required,min=8,max=64"`
 	}{}
 
 	if err := c.Bind().JSON(&payload); err != nil {
 		return err
+	}
+
+	validate := validator.New()
+
+	if err := validate.Struct(payload); err != nil {
+		validationErrors := err.(validator.ValidationErrors)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": fmt.Sprintf("Validation error: %s", validationErrors),
+			"user":    nil,
+		})
 	}
 
 	tx := database.Client.Begin()
