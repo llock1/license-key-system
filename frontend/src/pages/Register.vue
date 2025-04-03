@@ -17,7 +17,7 @@ const checkTokenValidity = async () => {
         console.log(response.data)
         router.push("/")
       } else {
-        store.dispatch('removeToken')
+        store.commit('removeToken')
       }
     } catch (error) {
       console.log(error)

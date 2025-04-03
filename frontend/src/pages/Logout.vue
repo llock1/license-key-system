@@ -7,7 +7,7 @@ const router = useRouter()
 const token = store.getters.getToken
 
 if (token) {
-  store.dispatch("removeToken")
+  store.commit("clearToken")
 }
 
 router.push("/login")

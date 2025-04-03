@@ -84,5 +84,4 @@ func Login(c fiber.Ctx) error {
 			IsBanned:     user.IsBanned,
 		},
 	})
-
 }

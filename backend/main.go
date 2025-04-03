@@ -43,6 +43,7 @@ func main() {
 	// RESTRICTED VIEWS
 	app.Get("/api/keys", routes.AllKeys)
 	app.Get("/api/keys/:id/delete", routes.DeleteKey)
+	app.Get("/api/keys/create", routes.CreateKey)
 
 	app.Listen(fmt.Sprintf(":%s", config.Vars.Port))
 }

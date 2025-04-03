@@ -1,11 +1,17 @@
 package routes
 
 import (
+	"github.com/gofiber/fiber/v3"
+	"github.com/google/uuid"
 	"license/database"
 	"license/models"
-
-	"github.com/gofiber/fiber/v3"
 )
+
+type KeyDTO struct {
+	ID   uint   `json:"id"`
+	Key  string `json:"key"`
+	Hwid string `json:"hwid"`
+}
 
 func AllKeys(c fiber.Ctx) error {
 	var keys []models.License
@@ -25,4 +31,24 @@ func DeleteKey(c fiber.Ctx) error {
 	database.Client.First(&key, id)
 	database.Client.Delete(&key)
 	return c.SendStatus(fiber.StatusOK)
+}
+
+func CreateKey(c fiber.Ctx) error {
+	key := models.License{
+		CreatorID: 1,
+		ProductID: 1,
+		Key:       uuid.New().String(),
+	}
+	if err := database.Client.Create(&key).Error; err != nil {
+		return err
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"message": "Key created",
+		"key": KeyDTO{
+			ID:   key.ID,
+			Key:  key.Key,
+			Hwid: key.Hwid,
+		},
+	})
 }

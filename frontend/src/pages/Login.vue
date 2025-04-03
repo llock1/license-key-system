@@ -1,11 +1,14 @@
 <script setup>
+// Imports
 import {onMounted, ref} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from "vue-toastification";
+import {CheckTokenValidity} from "@/functions/index.js";
 import {API_URL} from "@/config/index.js";
 import axios from 'axios'
 
+// Setup Variables
 const store = useStore()
 const router = useRouter()
 const toast = useToast()
@@ -15,24 +18,7 @@ const password = ref('')
 
 const token = store.getters.getToken
 
-const checkTokenValidity = async () => {
-  if (token) {
-    try {
-      const response = await axios.post((API_URL + "/api/check-token"), { token })
-
-      if (response.status === 200) {
-        console.log(response.data)
-        router.push("/")
-      } else {
-        store.dispatch('removeToken')
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-
+// Functions
 const handleLogin = async () => {
   try {
     const response = await axios.post((API_URL + "/api/login"), {
@@ -41,8 +27,10 @@ const handleLogin = async () => {
     })
 
     if (response.status === 200) {
-      store.dispatch('removeToken')
-      store.dispatch('storeToken', response.data['token'])
+      store.commit('clearToken')
+      store.commit('setToken', response.data['token'])
+      store.commit('setUsername', response.data['user']['username'])
+      store.commit('setEmail', response.data['user']['email'])
       router.push("/")
       toast.success("Successfully logged in!", {
         timeout: 2000
@@ -59,8 +47,9 @@ const handleLogin = async () => {
   }
 }
 
+// On page load
 onMounted(() => {
-  checkTokenValidity();
+  CheckTokenValidity(store, router);
 });
 </script>
 
