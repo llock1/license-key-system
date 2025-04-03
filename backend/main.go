@@ -41,9 +41,9 @@ func main() {
 	app.Use(middleware.AuthMiddleware())
 
 	// RESTRICTED VIEWS
-	app.Get("/api/keys", routes.AllKeys)
-	app.Get("/api/keys/:id/delete", routes.DeleteKey)
-	app.Get("/api/keys/create", routes.CreateKey)
+	app.Get("/api/licenses", routes.GetLicenses)
+	app.Delete("/api/licenses/:id", routes.DeleteLicense)
+	app.Post("/api/licenses", routes.CreateLicense)
 
 	app.Listen(fmt.Sprintf(":%s", config.Vars.Port))
 }

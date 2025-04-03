@@ -1,9 +1,10 @@
 package middleware
 
 import (
+	"license/config"
+
 	"github.com/gofiber/fiber/v3"
 	"github.com/golang-jwt/jwt/v5"
-	"license/config"
 )
 
 func AuthMiddleware() fiber.Handler {

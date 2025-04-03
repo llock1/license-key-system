@@ -8,25 +8,25 @@ import (
 	"github.com/google/uuid"
 )
 
-type KeyDTO struct {
+type LicenseDTO struct {
 	ID   uint   `json:"id"`
 	Key  string `json:"key"`
 	Hwid string `json:"hwid"`
 }
 
-func AllKeys(c fiber.Ctx) error {
+func GetLicenses(c fiber.Ctx) error {
 	var keys []models.License
 
 	err := database.Client.Find(&keys).Error
 
 	if err != nil {
-		return c.SendString("No Keys Found")
+		return c.SendString("No licenses found")
 	}
 
 	return c.JSON(keys)
 }
 
-func DeleteKey(c fiber.Ctx) error {
+func DeleteLicense(c fiber.Ctx) error {
 	id := c.Params("id")
 	var key models.License
 	database.Client.First(&key, id)
@@ -34,7 +34,7 @@ func DeleteKey(c fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusOK)
 }
 
-func CreateKey(c fiber.Ctx) error {
+func CreateLicense(c fiber.Ctx) error {
 	key := models.License{
 		CreatorID: 1,
 		ProductID: 1,
@@ -46,7 +46,7 @@ func CreateKey(c fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
 		"message": "Key created",
-		"key": KeyDTO{
+		"license": LicenseDTO{
 			ID:   key.ID,
 			Key:  key.Key,
 			Hwid: key.HWID,

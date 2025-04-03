@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 // PAGES
 import Login from '@/pages/Login.vue'
 import Logout from '@/pages/Logout.vue'
-import KeyListing from '@/pages/KeyListing.vue'
+import LicensePage from '@/pages/Licenses.vue'
 import Register from '@/pages/Register.vue'
 
 // LAYOUTS
@@ -15,7 +15,7 @@ const routes = [
         path: '/',
         component: DashboardLayout,
         children: [
-            { path: '', component: KeyListing },
+            { path: '', component: LicensePage },
         ]
     },
     {
