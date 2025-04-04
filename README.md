@@ -17,7 +17,7 @@ A license key system built with Vue.js and Golang
 
 Install my-project with npm
 
-```bash
+```sh
   cd frontend
   npm install
   npm run dev
@@ -27,7 +27,7 @@ Install my-project with npm
 
 Install my-project with npm
 
-```bash
+```sh
   cd backend
   go run . --development
 ```
@@ -36,9 +36,10 @@ Install my-project with npm
 
 To run this project locally, you will need to fill your `backend/.env.local` file with the following informatiom
 
-`FRONTEND_URL` (usually localhost:5173)
+`FRONTEND_URL` (default: `localhost:5173`)
 
-`PORT` (usually 8090)
+`PORT` (default: `8090`)
 
-`JWT_SECRET` (make up your own!)
+`JWT_SECRET` (default: `my-secret`)
 
+`POSTGRES_URL`
