@@ -34,7 +34,7 @@ Install my-project with npm
     
 ## Environment Variables
 
-To run this project locally, you will need to fill your .env.devlopment file with the following informatiom
+To run this project locally, you will need to fill your `backend/.env.local` file with the following informatiom
 
 `FRONTEND_URL` (usually localhost:5173)
 
