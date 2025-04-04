@@ -47,9 +47,10 @@ export async function CheckTokenValidity(store, router) {
 
 export function ValidatePassword(password) {
     const minLength = 8;
+    const maxLength = 64;
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    if (password.length >= minLength && hasSpecialChar) {
+    if (password.length >= minLength && password.length <= maxLength) {
         return true;
     } else {
         return false;
