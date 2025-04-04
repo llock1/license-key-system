@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { ref, onMounted } from "vue";
 import { useToast } from "vue-toastification";
-import { CheckUserIsAuthenticated } from "@/functions/index.js";
+import { checkUserIsAuthenticated } from "@/utils/auth.js";
 import { API_URL } from "@/config/index.js";
 import DeleteLicense from "@/components/license/DeleteLicense.vue";
 import CopyLicense from "@/components/license/CopyLicense.vue";
@@ -40,7 +40,7 @@ const removeLicense = (keyId) => {
 };
 
 onMounted(() => {
-  CheckUserIsAuthenticated(store, router);
+  checkUserIsAuthenticated(store, router);
   getLicenses();
 });
 </script>

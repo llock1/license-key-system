@@ -4,7 +4,7 @@ import {onMounted, ref} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from "vue-toastification";
-import {CheckTokenValidity} from "@/functions/index.js";
+import {checkTokenValidity} from "@/utils/auth.js";
 import {API_URL} from "@/config/index.js";
 import axios from 'axios'
 
@@ -49,7 +49,7 @@ const handleLogin = async () => {
 
 // On page load
 onMounted(() => {
-  CheckTokenValidity(store, router);
+  checkTokenValidity(store, router);
 });
 </script>
 

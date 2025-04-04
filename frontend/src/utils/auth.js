@@ -3,7 +3,10 @@ import {API_URL} from "@/config/index.js";
 
 // To be used in all "restricted" pages
 // Redirects to login if JWT is invalid
-export async function CheckUserIsAuthenticated(store, router) {
+export async function checkUserIsAuthenticated(
+    store, router
+) {
+    const loginPath = "/login"
     const token = store.getters.getToken
 
     if (token) {
@@ -14,21 +17,21 @@ export async function CheckUserIsAuthenticated(store, router) {
                 console.log(response.data);
             } else {
                 store.commit('clearAll');
-                router.push("/login");
+                router.push(loginPath);
             }
         } catch (error) {
             console.log(error);
-            router.push("/login");
+            router.push(loginPath);
         }
     } else {
-        router.push("/login");
+        router.push(loginPath);
     }
 }
 
 // Used in Login/Register pages to check if you are already authenticated
 // Very similiar to above function, but redirects to dashboard instead of login (opposite)
 // Plan to merge the two
-export async function CheckTokenValidity(store, router) {
+export async function checkTokenValidity(store, router) {
     const token = store.getters.getToken;
     if (token) {
         try {
@@ -42,17 +45,5 @@ export async function CheckTokenValidity(store, router) {
         } catch (error) {
             console.log(error);
         }
-    }
-}
-
-export function ValidatePassword(password) {
-    const minLength = 8;
-    const maxLength = 64;
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    if (password.length >= minLength && password.length <= maxLength) {
-        return true;
-    } else {
-        return false;
     }
 }

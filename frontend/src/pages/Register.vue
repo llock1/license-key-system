@@ -4,7 +4,7 @@ import axios from "axios";
 import {API_URL} from "@/config/index.js";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
-import {ValidatePassword, CheckTokenValidity} from "@/functions/index.js";
+import {validatePassword, checkTokenValidity} from "@/utils/auth.js";
 import {useToast} from "vue-toastification";
 
 const toast = useToast()
@@ -18,7 +18,7 @@ const password = ref('')
 
 
 const handleRegister = async () => {
-  if (!ValidatePassword(password.value)) {
+  if (!validatePassword(password.value)) {
     toast.error("Sorry, your password must have at least 8 characters & a special character", 4000)
     return
   }
@@ -41,7 +41,7 @@ const handleRegister = async () => {
 }
 
 onMounted(() => {
-  CheckTokenValidity(store, router)
+  checkTokenValidity(store, router)
 });
 </script>
 
