@@ -4,7 +4,8 @@ import axios from "axios";
 import {API_URL} from "@/config/index.js";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
-import {validatePassword, checkTokenValidity} from "@/utils/auth.js";
+import {checkTokenValidity} from "@/utils/auth.js";
+import { validatePassword } from '@/utils/validation';
 import {useToast} from "vue-toastification";
 
 const toast = useToast()
