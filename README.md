@@ -42,4 +42,4 @@ To run this project locally, you will need to fill your `backend/.env.local` fil
 
 `JWT_SECRET` (default: `my-secret`)
 
-`POSTGRES_URL` (default: `postgresql://<username>:<password>@127.0.0.1:<port>/<db_name>`
+`POSTGRES_URL` (default: `postgresql://<username>:<password>@127.0.0.1:<port>/<db_name>`)
