@@ -1,6 +1,7 @@
 package models
 
 import (
+	"license/utils"
 	"time"
 
 	"gorm.io/gorm"
@@ -22,4 +23,13 @@ type User struct {
 	IsSupport    bool
 	IsStaff      bool
 	IsBanned     bool
+}
+
+func (u *User) SetPassword(password string) error {
+	hashedPassword, err := utils.HashPassword(password)
+	if err != nil {
+		return err
+	}
+	u.Password = hashedPassword
+	return nil
 }

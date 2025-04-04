@@ -46,7 +46,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex justify-end mb-4">
+  <div class="flex justify-between mb-4">
+    <h1 class="font-bold text-2xl">Licenses</h1>
     <NewLicense />
   </div>
   <div class="relative overflow-x-auto">

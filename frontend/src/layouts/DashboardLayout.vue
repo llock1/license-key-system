@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useStore} from "vuex";
+import { useStore } from "vuex";
 import placeholder from "@/assets/placeholder_person.webp";
 const store = useStore()
 const username = store.getters.getUsername

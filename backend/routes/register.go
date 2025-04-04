@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func RegisterUser(c fiber.Ctx) error {
@@ -50,15 +49,9 @@ func RegisterUser(c fiber.Ctx) error {
 		})
 	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-
 	user := models.User{
 		Username: payload.Username,
 		Email:    payload.Email,
-		Password: string(hashedPassword),
 
 		IsSuperAdmin: false,
 		IsAdmin:      false,
@@ -67,6 +60,7 @@ func RegisterUser(c fiber.Ctx) error {
 		IsStaff:      false,
 		IsBanned:     false,
 	}
+	user.SetPassword(payload.Password)
 
 	if err := tx.Create(&user).Error; err != nil {
 		return err
