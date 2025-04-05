@@ -3,6 +3,7 @@ package routes
 import (
 	"fmt"
 	"license/database"
+	"license/dto"
 	"license/models"
 	"strings"
 
@@ -73,7 +74,7 @@ func RegisterUser(c fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"success": true,
 		"message": nil,
-		"user": UserDTO{
+		"user": dto.UserDTO{
 			Email:    &user.Email,
 			Username: user.Username,
 

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"license/config"
 	"license/database"
+	"license/dto"
 	"license/models"
 	"license/utils"
 	"strings"
@@ -64,7 +65,7 @@ func LoginUser(c fiber.Ctx) error {
 		"success": true,
 		"message": nil,
 		"token":   tokenStr,
-		"user": UserDTO{
+		"user": dto.UserDTO{
 			Username: user.Username,
 			Email:    &user.Email,
 

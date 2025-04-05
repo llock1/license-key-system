@@ -2,17 +2,12 @@ package routes
 
 import (
 	"license/database"
+	"license/dto"
 	"license/models"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
 )
-
-type LicenseDTO struct {
-	ID   uint   `json:"id"`
-	Key  string `json:"key"`
-	Hwid string `json:"hwid"`
-}
 
 func GetLicenses(c fiber.Ctx) error {
 	var keys []models.License
@@ -46,7 +41,7 @@ func CreateLicense(c fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
 		"message": "Key created",
-		"license": LicenseDTO{
+		"license": dto.LicenseDTO{
 			ID:   key.ID,
 			Key:  key.Key,
 			Hwid: key.HWID,
