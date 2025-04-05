@@ -3,6 +3,7 @@ package routes
 import (
 	"license/database"
 	"license/dto"
+	"license/helpers"
 	"license/models"
 
 	"github.com/gofiber/fiber/v3"
@@ -13,9 +14,8 @@ func GetLicenses(c fiber.Ctx) error {
 	var keys []models.License
 
 	err := database.Client.Find(&keys).Error
-
 	if err != nil {
-		return c.SendString("No licenses found")
+		return err
 	}
 
 	return c.JSON(keys)
@@ -24,8 +24,11 @@ func GetLicenses(c fiber.Ctx) error {
 func DeleteLicense(c fiber.Ctx) error {
 	id := c.Params("id")
 	var key models.License
-	database.Client.First(&key, id)
-	database.Client.Delete(&key)
+
+	err := helpers.DeleteModel(&key, id)
+	if err != nil {
+		return err
+	}
 	return c.SendStatus(fiber.StatusOK)
 }
 

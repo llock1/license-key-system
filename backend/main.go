@@ -41,9 +41,14 @@ func main() {
 	app.Use(middleware.AuthMiddleware())
 
 	// RESTRICTED VIEWS
+	// Licenses
 	app.Get("/api/licenses", routes.GetLicenses)
 	app.Delete("/api/licenses/:id", routes.DeleteLicense)
 	app.Post("/api/licenses", routes.CreateLicense)
+
+	// Products
+	app.Get("api/products", routes.GetProducts)
+	app.Delete("api/products/:id", routes.DeleteProduct)
 
 	app.Listen(fmt.Sprintf(":%s", config.Vars.Port))
 }
