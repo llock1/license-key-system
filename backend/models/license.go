@@ -11,6 +11,8 @@ type License struct {
 	Creator   User
 	ProductID int
 	Product   Product
+	UserID    *int
+	User      *User
 
 	Key  string `gorm:"uniqueIndex"`
 	HWID string
