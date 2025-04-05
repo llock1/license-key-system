@@ -10,6 +10,8 @@ type Product struct {
 	Owner       User
 	Title       string
 	Description string
+	Status      string
+	Version     string
 
 	IsListed bool
 }
