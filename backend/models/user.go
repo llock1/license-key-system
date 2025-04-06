@@ -25,6 +25,36 @@ type User struct {
 	IsBanned     bool
 }
 
+const (
+	RoleUser = iota
+	RoleStaff
+	RoleSupport
+	RoleModerator
+	RoleAdmin
+	RoleSuperAdmin
+)
+
+func (user *User) GetUserRole() int {
+	switch {
+	case user.IsSuperAdmin:
+		return RoleSuperAdmin
+	case user.IsAdmin:
+		return RoleAdmin
+	case user.IsModerator:
+		return RoleModerator
+	case user.IsSupport:
+		return RoleSupport
+	case user.IsStaff:
+		return RoleStaff
+	default:
+		return RoleUser
+	}
+}
+
+func (user *User) IsAbove(other *User) bool {
+	return user.GetUserRole() < other.GetUserRole()
+}
+
 func (u *User) SetPassword(password string) error {
 	hashedPassword, err := utils.HashPassword(password)
 	if err != nil {
