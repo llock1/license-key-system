@@ -15,5 +15,5 @@ type License struct {
 	User      *User
 
 	Key  string `gorm:"uniqueIndex"`
-	HWID string
+	HWID *string
 }
