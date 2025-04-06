@@ -3,7 +3,6 @@ package routes
 import (
 	"license/database"
 	"license/dto"
-	"license/helpers"
 	"license/models"
 
 	"github.com/gofiber/fiber/v3"
@@ -11,43 +10,70 @@ import (
 )
 
 func GetLicenses(c fiber.Ctx) error {
-	var keys []models.License
 
-	err := database.Client.Find(&keys).Error
-	if err != nil {
+	var licenses []models.License
+	if err := database.Client.Find(&licenses).Error; err != nil {
 		return err
 	}
 
-	return c.JSON(keys)
+	licenseDTOs := []dto.LicenseDTO{}
+	for _, license := range licenses {
+		licenseDTOs = append(licenseDTOs, dto.LicenseDTO{
+			ID:        license.ID,
+			CreatedAt: license.CreatedAt,
+			UpdatedAt: license.UpdatedAt,
+
+			CreatorID: license.CreatorID,
+			ProductID: license.ProductID,
+			UserID:    license.UserID,
+
+			Key:  license.Key,
+			HWID: license.HWID,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"success":  true,
+		"licenses": licenseDTOs,
+	})
 }
 
 func DeleteLicense(c fiber.Ctx) error {
 	id := c.Params("id")
-	var key models.License
 
-	err := helpers.DeleteModel(&key, id)
-	if err != nil {
+	if err := database.Client.Delete(&models.License{}, id).Error; err != nil {
 		return err
 	}
+
 	return c.SendStatus(fiber.StatusOK)
 }
 
 func CreateLicense(c fiber.Ctx) error {
-	key := models.License{
+
+	license := models.License{
 		CreatorID: 1,
 		ProductID: 1,
 		Key:       uuid.New().String(),
 	}
-	if err := database.Client.Create(&key).Error; err != nil {
+
+	if err := database.Client.Create(&license).Error; err != nil {
 		return err
 	}
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
 		"message": "Key created",
 		"license": dto.LicenseDTO{
-			ID:   key.ID,
-			Key:  key.Key,
-			Hwid: key.HWID,
+			ID:        license.ID,
+			CreatedAt: license.CreatedAt,
+			UpdatedAt: license.UpdatedAt,
+
+			CreatorID: license.CreatorID,
+			ProductID: license.ProductID,
+			UserID:    license.UserID,
+
+			Key:  license.Key,
+			HWID: license.HWID,
 		},
 	})
 }
