@@ -2,27 +2,12 @@ package routes
 
 import (
 	"license/database"
+	"license/dto"
 	"license/helpers"
 	"license/models"
-	"time"
 
 	"github.com/gofiber/fiber/v3"
 )
-
-type ProductDTO struct {
-	ID        uint      `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-
-	Name        string `json:"name"`
-	OwnerID     int    `json:"owner_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Status      string `json:"status"`
-	Version     string `json:"version"`
-
-	IsListed bool `json:"is_listed"`
-}
 
 func GetProducts(c fiber.Ctx) error {
 
@@ -31,9 +16,9 @@ func GetProducts(c fiber.Ctx) error {
 		return err
 	}
 
-	productDTOs := []ProductDTO{}
+	productDTOs := []dto.ProductDTO{}
 	for _, product := range products {
-		productDTOs = append(productDTOs, ProductDTO{
+		productDTOs = append(productDTOs, dto.ProductDTO{
 			ID:        product.ID,
 			CreatedAt: product.CreatedAt,
 			UpdatedAt: product.UpdatedAt,
