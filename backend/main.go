@@ -37,6 +37,7 @@ func main() {
 	app.Post("/api/login", routes.LoginUser)
 	app.Post("/api/register", routes.RegisterUser)
 	app.Post("/api/check-token", routes.CheckTokenHandler)
+	app.Get("/api/products", routes.GetProducts)
 
 	app.Use(middleware.AuthMiddleware())
 
@@ -47,8 +48,7 @@ func main() {
 	app.Post("/api/licenses", routes.CreateLicense)
 
 	// Products
-	app.Get("api/products", routes.GetProducts)
-	app.Delete("api/products/:id", routes.DeleteProduct)
+	app.Delete("/api/products/:id", routes.DeleteProduct)
 
 	app.Listen(fmt.Sprintf(":%s", config.Vars.Port))
 }

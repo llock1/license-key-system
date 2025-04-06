@@ -11,7 +11,8 @@ func AuthMiddleware() fiber.Handler {
 	return func(c fiber.Ctx) error {
 		tokenString := c.Get("Authorization")
 		if tokenString == "" {
-			return c.SendStatus(fiber.StatusUnauthorized)
+			return c.Status(fiber.StatusUnauthorized).
+				SendString("no authorization token")
 		}
 		tokenString = tokenString[len("Bearer "):]
 		jwtSecret := []byte(config.Vars.JWTSecret)
@@ -20,11 +21,13 @@ func AuthMiddleware() fiber.Handler {
 		})
 
 		if err != nil {
-			return c.SendStatus(fiber.StatusUnauthorized)
+			return c.Status(fiber.StatusInternalServerError).
+				SendString("failed to parse token")
 		}
 
 		if !token.Valid {
-			return c.SendStatus(fiber.StatusUnauthorized)
+			return c.Status(fiber.StatusUnauthorized).
+				SendString("invalid token")
 		}
 
 		return c.Next()
