@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -14,6 +16,7 @@ type License struct {
 	UserID    *int
 	User      *User
 
-	Key  string `gorm:"uniqueIndex"`
-	HWID *string
+	Key         string `gorm:"uniqueIndex"`
+	HWID        *string
+	HWIDResetAt *time.Time
 }
