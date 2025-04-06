@@ -27,9 +27,7 @@ func GetLicenses(c fiber.Ctx) error {
 			ProductID: license.ProductID,
 			UserID:    license.UserID,
 
-			Key:         license.Key,
-			HWID:        license.HWID,
-			HWIDResetAt: license.HWIDResetAt,
+			Key: license.Key,
 		})
 	}
 
@@ -73,9 +71,7 @@ func CreateLicense(c fiber.Ctx) error {
 			ProductID: license.ProductID,
 			UserID:    license.UserID,
 
-			Key:         license.Key,
-			HWID:        license.HWID,
-			HWIDResetAt: license.HWIDResetAt,
+			Key: license.Key,
 		},
 	})
 }

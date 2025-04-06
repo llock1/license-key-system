@@ -11,7 +11,5 @@ type LicenseDTO struct {
 	ProductID int  `json:"product_id"`
 	UserID    *int `json:"user_id"`
 
-	Key         string     `json:"key"`
-	HWID        *string    `json:"hwid"`
-	HWIDResetAt *time.Time `json:"hwid_reset_at"`
+	Key string `json:"key"`
 }

@@ -17,5 +17,8 @@ type Subscription struct {
 	StartDate time.Time
 	EndDate   *time.Time
 
+	HWID        *string
+	HWIDResetAt *time.Time
+
 	IsRevoked bool
 }
